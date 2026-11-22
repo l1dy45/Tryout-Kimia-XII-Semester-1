@@ -1,0 +1,1021 @@
+<!DOCTYPE html>
+<html lang="id" class="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tryout Kimia XII Semester 1 - SMAN 1 WARU</title>
+
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                    },
+                    colors: {
+                        primary: '#059669', // Emerald 600
+                        secondary: '#0f766e', // Teal 600
+                    }
+                }
+            }
+        }
+    </script>
+
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <!-- SweetAlert2 -->
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    
+    <!-- Chart.js -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    
+    <!-- html2pdf -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+
+    <style>
+        /* Custom Styles for smooth transitions and scrollbar */
+        body { font-family: 'Inter', sans-serif; transition: background-color 0.3s, color 0.3s; }
+        ::-webkit-scrollbar { width: 8px; height: 8px; }
+        ::-webkit-scrollbar-track { background: transparent; }
+        ::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 4px; }
+        .dark ::-webkit-scrollbar-thumb { background: #475569; }
+        
+        .radio-custom:checked + div {
+            border-color: #059669;
+            background-color: #d1fae5;
+        }
+        .dark .radio-custom:checked + div {
+            border-color: #10b981;
+            background-color: #064e3b;
+        }
+        
+        /* Modal Animation */
+        .modal-enter { animation: fadeIn 0.3s ease-out forwards; }
+        .modal-exit { animation: fadeOut 0.3s ease-in forwards; }
+        @keyframes fadeIn { from { opacity: 0; transform: scale(0.95); } to { opacity: 1; transform: scale(1); } }
+        @keyframes fadeOut { from { opacity: 1; transform: scale(1); } to { opacity: 0; transform: scale(0.95); } }
+    </style>
+</head>
+<body class="bg-gray-50 text-gray-800 dark:bg-slate-900 dark:text-gray-100 min-h-screen flex flex-col">
+
+    <!-- Dark Mode Toggle -->
+    <button onclick="toggleDarkMode()" title="Ubah Tema Terang/Gelap" class="fixed top-4 right-4 z-50 p-3 rounded-full bg-white dark:bg-slate-800 shadow-lg text-gray-800 dark:text-yellow-400 hover:scale-110 transition-transform border border-gray-200 dark:border-slate-700">
+        <i class="fas fa-sun dark:hidden"></i>
+        <i class="fas fa-moon hidden dark:block"></i>
+    </button>
+
+    <!-- ==================== LANDING PAGE ==================== -->
+    <section id="landing-page" class="flex-1 flex flex-col md:flex-row w-full min-h-screen">
+        <!-- Kolom Kiri: Form -->
+        <div class="w-full md:w-1/2 flex flex-col justify-center px-8 py-12 md:px-16 lg:px-24 bg-white dark:bg-slate-800 shadow-xl z-10">
+            <div class="flex items-center gap-4 mb-8">
+                <!-- URL LOGO SEKOLAH -->
+                <img src="https://imgur.com/6j7bQ0X.jpg" onerror="this.src='https://placehold.co/100x100/059669/ffffff?text=SMAN+1'" alt="Logo SMAN 1 WARU" class="w-16 h-16 rounded-full object-cover shadow border-2 border-primary">
+                <div>
+                    <h1 class="text-2xl font-bold text-gray-900 dark:text-white">SMAN 1 WARU</h1>
+                    <p class="text-sm text-gray-500 dark:text-gray-400">Guru Kimia: Lidya Pancaningtyas, S.Pd, M.Si.</p>
+                </div>
+            </div>
+            
+            <div class="mb-8">
+                <h2 class="text-3xl md:text-4xl font-extrabold mb-3 text-gray-900 dark:text-white leading-tight">TRY OUT KIMIA XII SEMESTER 1</h2>
+                <div class="p-3 bg-amber-50 dark:bg-amber-900/30 border border-amber-200 dark:border-amber-800 rounded-xl text-xs text-amber-800 dark:text-amber-200 flex items-start gap-2.5">
+                    <i class="fas fa-shield-alt text-base mt-0.5 text-amber-600 dark:text-amber-400"></i>
+                    <span><b>Mode Pengawasan Aktif:</b> Ujian berjalan dalam layar penuh (Fullscreen). Keluar dari layar penuh atau berpindah tab akan tercatat otomatis sebagai pelanggaran.</span>
+                </div>
+            </div>
+
+            <form id="start-form" class="space-y-5" onsubmit="event.preventDefault();">
+                <div>
+                    <label class="block text-sm font-medium mb-1">Nama Lengkap</label>
+                    <input type="text" id="input-nama" required placeholder="Masukkan nama lengkap Anda" 
+                           class="w-full px-4 py-3 rounded-xl border border-gray-300 dark:border-slate-600 focus:ring-2 focus:ring-primary focus:outline-none dark:bg-slate-700">
+                </div>
+                <div>
+                    <label class="block text-sm font-medium mb-1">Kelas</label>
+                    <select id="input-kelas" required class="w-full px-4 py-3 rounded-xl border border-gray-300 dark:border-slate-600 focus:ring-2 focus:ring-primary focus:outline-none dark:bg-slate-700">
+                        <option value="" disabled selected>Pilih Kelas...</option>
+                        <option value="XII 1">XII 1</option>
+                        <option value="XII 2">XII 2</option>
+                        <option value="XII 3">XII 3</option>
+                        <option value="XII 4">XII 4</option>
+                        <option value="XII 5">XII 5</option>
+                        <option value="XII 6">XII 6</option>
+                        <option value="XII 7">XII 7</option>
+                        <option value="XII 8">XII 8</option>
+                        <option value="XII 9">XII 9</option>
+                        <option value="XII 10">XII 10</option>
+                    </select>
+                </div>
+                <button type="button" id="btn-mulai" disabled onclick="startQuiz()" 
+                        class="w-full py-4 mt-4 bg-primary hover:bg-secondary disabled:bg-gray-400 dark:disabled:bg-slate-600 text-white font-bold rounded-xl transition-colors shadow-lg cursor-not-allowed">
+                    Mulai
+                </button>
+            </form>
+        </div>
+        
+        <!-- Kolom Kanan: Ilustrasi -->
+        <div class="hidden md:block w-full md:w-1/2 relative bg-slate-900">
+            <!-- URL ILUSTRASI -->
+            <img src="https://imgur.com/Vxu06pA.jpg" onerror="this.src='https://placehold.co/800x1000/0f172a/10b981?text=Laboratorium+Kimia'"
+                 alt="Ilustrasi Kimia" class="absolute inset-0 w-full h-full object-cover opacity-80">
+            <div class="absolute inset-0 bg-gradient-to-t from-slate-900 via-transparent to-transparent"></div>
+        </div>
+    </section>
+
+    <!-- ==================== QUIZ ENGINE ==================== -->
+    <section id="quiz-page" class="hidden flex-1 flex flex-col md:flex-row w-full max-w-7xl mx-auto p-4 gap-6 md:h-screen">
+        
+        <!-- Main Quiz Content -->
+        <div class="flex-1 flex flex-col bg-white dark:bg-slate-800 rounded-2xl shadow-lg border border-gray-100 dark:border-slate-700 overflow-hidden min-h-[70vh] md:h-full">
+            
+            <!-- Header Soal -->
+            <div class="flex flex-wrap justify-between items-center gap-2 p-4 border-b border-gray-200 dark:border-slate-700 bg-gray-50 dark:bg-slate-800/50">
+                <h3 class="text-xl font-bold">Soal No. <span id="soal-nomor">1</span></h3>
+                <div class="flex flex-wrap gap-2 text-xs font-bold" id="soal-badges">
+                    <!-- Badges Injected here -->
+                </div>
+            </div>
+
+            <!-- Konten Soal -->
+            <div class="flex-1 overflow-y-auto p-6 md:p-8" id="soal-konten">
+                <div id="stimulus-container" class="mb-6 p-4 bg-blue-50 dark:bg-slate-700/50 rounded-xl border border-blue-100 dark:border-slate-600 text-sm md:text-base leading-relaxed hidden">
+                    <!-- Stimulus Teks/Gambar -->
+                </div>
+                
+                <p id="pertanyaan-teks" class="text-lg md:text-xl font-semibold mb-6 leading-snug"></p>
+                
+                <div id="opsi-container" class="space-y-3">
+                    <!-- Pilihan Ganda / Kompleks / BS / Menjodohkan -->
+                </div>
+            </div>
+
+            <!-- Footer Navigasi Soal -->
+            <div class="p-4 border-t border-gray-200 dark:border-slate-700 bg-gray-50 dark:bg-slate-800 flex justify-between items-center gap-2">
+                <button onclick="prevQuestion()" id="btn-prev" class="px-4 py-2.5 bg-gray-200 dark:bg-slate-700 text-gray-700 dark:text-gray-200 rounded-lg hover:bg-gray-300 dark:hover:bg-slate-600 transition disabled:opacity-50 text-sm md:text-base font-medium">
+                    <i class="fas fa-chevron-left mr-1 md:mr-2"></i> Sebelumnya
+                </button>
+                
+                <button onclick="toggleDoubt()" id="btn-ragu" class="px-4 py-2.5 bg-yellow-100 text-yellow-700 dark:bg-yellow-900/50 dark:text-yellow-400 border border-yellow-300 dark:border-yellow-700 rounded-lg hover:bg-yellow-200 transition text-sm md:text-base font-medium">
+                    <i class="fas fa-flag mr-1"></i> Ragu-ragu
+                </button>
+                
+                <button onclick="nextQuestion()" id="btn-next" class="px-4 py-2.5 bg-primary text-white rounded-lg hover:bg-secondary transition text-sm md:text-base font-medium">
+                    Selanjutnya <i class="fas fa-chevron-right ml-1 md:ml-2"></i>
+                </button>
+            </div>
+        </div>
+
+        <!-- Sidebar Navigasi & Timer -->
+        <div class="w-full md:w-80 flex flex-col gap-4">
+            <!-- Timer Box -->
+            <div class="bg-white dark:bg-slate-800 rounded-2xl shadow-lg border border-gray-100 dark:border-slate-700 p-5 text-center">
+                <p class="text-sm font-medium text-gray-500 dark:text-gray-400 mb-1">Sisa Waktu</p>
+                <div id="timer-display" class="text-4xl font-mono font-bold text-gray-800 dark:text-white">
+                    45:00
+                </div>
+            </div>
+
+            <!-- Navigasi Grid -->
+            <div class="bg-white dark:bg-slate-800 rounded-2xl shadow-lg border border-gray-100 dark:border-slate-700 p-5 flex-1 overflow-y-auto">
+                <h4 class="font-bold mb-4 text-center border-b pb-2 dark:border-slate-700">Navigasi Soal (30)</h4>
+                <div class="grid grid-cols-5 gap-2 place-items-center" id="nav-grid">
+                    <!-- Kotak Nomor Soal Injected Here -->
+                </div>
+                
+                <!-- Legenda -->
+                <div class="mt-6 space-y-2 text-xs">
+                    <div class="flex items-center gap-2"><span class="w-4 h-4 rounded bg-white border border-gray-300 dark:bg-slate-700 dark:border-slate-600 inline-block"></span> Belum Dijawab</div>
+                    <div class="flex items-center gap-2"><span class="w-4 h-4 rounded bg-green-500 inline-block"></span> Sudah Dijawab</div>
+                    <div class="flex items-center gap-2"><span class="w-4 h-4 rounded bg-yellow-400 inline-block"></span> Ragu-ragu</div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ==================== HASIL & ANALITIK ==================== -->
+    <section id="result-page" class="hidden flex-col items-center py-10 px-4">
+        <div class="w-full max-w-4xl" id="pdf-content">
+            
+            <div class="bg-white dark:bg-slate-800 rounded-3xl shadow-xl p-8 mb-8 border border-gray-100 dark:border-slate-700 relative overflow-hidden">
+                <div class="absolute top-0 left-0 w-full h-2 bg-gradient-to-r from-primary to-secondary"></div>
+                
+                <!-- Identitas & Skor -->
+                <div class="text-center mb-8">
+                    <h2 class="text-3xl font-extrabold mb-1">Hasil Try Out Kimia XII</h2>
+                    <p class="text-gray-500 dark:text-gray-400 text-lg mb-6">SMAN 1 WARU • Semester 1</p>
+                    
+                    <div class="inline-block p-6 rounded-2xl bg-gray-50 dark:bg-slate-700 border border-gray-200 dark:border-slate-600 min-w-[300px] max-w-full">
+                        <p class="font-semibold text-xl" id="res-nama">Nama Siswa</p>
+                        <p class="text-gray-500 dark:text-gray-300 mb-4" id="res-kelas">Kelas</p>
+                        <div class="text-5xl font-black text-primary dark:text-emerald-400" id="res-skor">100</div>
+                        <p class="text-sm mt-2 font-medium">Skor Akhir</p>
+                        
+                        <!-- Status Pengiriman ke Google Sheets -->
+                        <div id="sheets-status" class="mt-4 pt-3 border-t border-gray-200 dark:border-slate-600 text-xs flex items-center justify-center gap-2 text-gray-500 dark:text-gray-400">
+                            <i class="fas fa-circle-notch fa-spin"></i> <span>Menyiapkan pengiriman data...</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Grafik Analitik -->
+                <div class="flex flex-col md:flex-row items-center justify-center gap-8 bg-gray-50 dark:bg-slate-900/50 p-6 rounded-2xl">
+                    <div class="w-48 h-48 shrink-0">
+                        <canvas id="resultChart"></canvas>
+                    </div>
+                    <div class="space-y-3 text-sm font-medium">
+                        <div class="flex items-center gap-3"><span class="w-4 h-4 bg-green-500 rounded-full block shrink-0"></span> <span id="stat-benar">Benar: 0</span></div>
+                        <div class="flex items-center gap-3"><span class="w-4 h-4 bg-red-500 rounded-full block shrink-0"></span> <span id="stat-salah">Salah: 0</span></div>
+                        <div class="flex items-center gap-3"><span class="w-4 h-4 bg-gray-300 rounded-full block shrink-0"></span> <span id="stat-kosong">Tidak Dijawab: 0</span></div>
+                        <div class="flex items-start gap-3 pt-2 border-t border-gray-200 dark:border-slate-700 text-amber-600 dark:text-amber-400 font-bold">
+                            <i class="fas fa-exclamation-triangle w-4 text-center mt-0.5 shrink-0"></i> 
+                            <span id="stat-pelanggaran">Pelanggaran: 0x</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="mt-8 flex flex-wrap justify-center gap-4">
+            <button onclick="location.reload()" class="px-6 py-3 bg-gray-600 hover:bg-gray-700 text-white rounded-xl font-bold transition shadow-lg">
+                <i class="fas fa-home mr-2"></i> Kembali ke Awal
+            </button>
+            <button onclick="downloadPDF()" class="px-6 py-3 bg-primary hover:bg-secondary text-white rounded-xl font-bold transition shadow-lg">
+                <i class="fas fa-file-pdf mr-2"></i> Unduh Hasil (PDF)
+            </button>
+        </div>
+    </section>
+
+    <!-- Modal Gambar Fullscreen -->
+    <div id="image-modal" onclick="closeModal()" class="fixed inset-0 z-50 hidden bg-black/90 flex items-center justify-center p-4 cursor-zoom-out">
+        <button onclick="closeModal()" class="absolute top-4 right-4 text-white text-3xl hover:text-gray-300"><i class="fas fa-times"></i></button>
+        <img id="modal-image-src" src="" alt="Zoom" class="max-w-full max-h-full object-contain rounded transition-transform transform scale-95">
+    </div>
+
+    <!-- ==================== JAVASCRIPT LOGIC ==================== -->
+    <script>
+        // ----------------- KONFIGURASI GOOGLE SHEETS -----------------
+        const GOOGLE_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbwcF7sFqWRZNe4QyPsnwOwaNiXAZDzRmy6vN2LOfTNb9QdM3f3lEnWnnrJeEqaXEd4LPg/exec"; 
+
+        // ----------------- BANK SOAL (30 Soal ASAS KIMIA) -----------------
+        const bankSoal = [
+            // --- PG (1-12) ---
+            { id: 1, type: 'pg', difficulty: "Mudah", cognitive: "Konsep",
+              question: "Diketahui kemolalan larutan = NaCl 0,1 molal, jika diketahui Kf air=1,86 oC/molal. Berapakah titik beku larutan tersebut?",
+              options: ["-0,127 oC", "-1,23 oC", "-2,45 oC", "-3,72 oC", "-6,74 oC"], answer: 3 },
+            { id: 2, type: 'pg', difficulty: "Sulit", cognitive: "Analisis",
+              question: "Kedalam dua sel yang berisi larutan LSO4 dan AgNO3 yang disusun secara seri dialirkan arus listrik ternyata diendapkan 3,25 gram logam L dan 10,8 gram logam Ag (Ar Ag=108). Massa atom relatif L adalah...",
+              options: ["32,5", "63,5", "65", "70,5", "72"], answer: 2 },
+            { id: 3, type: 'pg', difficulty: "Sedang", cognitive: "Konsep",
+              question: "Sebuah patung disepuh dengan perak dalam larutan perak nitrat dengan kuat arus 50 ampere selama 20 menit. Banyaknya perak yang melapisi patung tersebut adalah .... gram (diketahui Ar Ag = 108)",
+              options: [
+                  "(108 x 50 x 20 x 60) / 96500", 
+                  "(108 x 50 x 20) / (96500 x 60)", 
+                  "(108 x 50 x 60) / (96500 x 20)", 
+                  "(60 x 20 x 96500) / (50 x 108)", 
+                  "50 x 108"
+              ], answer: 0 },
+            { id: 4, type: 'pg', difficulty: "Sedang", cognitive: "Analisis",
+              question: "Pada reaksi redoks: a MnO4– + Fe2+ + b H+ &rarr; c Mn2+ + d Fe3+ + H2O. Koefisien reaksi setara pada a, b, c, dan d berturut-turut adalah …",
+              options: ["1, 4, 1, dan 2", "2, 1, 2, dan 4", "1, 8, 1, dan 5", "2, 8, 2, dan 4", "1, 4, 2, dan 2"], answer: 2 },
+            { id: 5, type: 'pg', difficulty: "Sedang", cognitive: "Analisis",
+              stimulus: "<div class='flex flex-col items-center'><img src='https://imgur.com/uNLiI6Q.jpg' class='w-full max-h-64 object-contain rounded cursor-zoom-in border border-gray-200 dark:border-slate-600 bg-white p-1' onclick='openModal(this.src)' alt='Ilustrasi Penyepuhan Sendok'><span class='text-xs text-gray-500 dark:text-gray-400 mt-1'><i class='fas fa-search-plus mr-1'></i>Klik gambar untuk memperbesar</span></div>",
+              question: "Sendok logam yang terbuat dari zink akan disepuh dengan logam tembaga. Pada proses penyepuhan diperlukan kuat arus sebesar 20 ampere selama 965 detik. Massa logam tembaga (Ar Cu = 63,5) yang diendapkan di katoda sebanyak ... gram",
+              options: ["2,35", "2,45", "3,15", "6,35", "7,45"], answer: 3 },
+            { id: 6, type: 'pg', difficulty: "Sedang", cognitive: "Analisis",
+              stimulus: "<img src='https://imgur.com/IhgsxS0.jpg' class='w-full max-h-56 object-contain mb-2 cursor-zoom-in rounded' onclick='openModal(this.src)' alt='Sel Elektrolisis CaCl2'>",
+              question: "Perhatikan sel elektrolisis larutan CaCl2 dengan elektroda Pt! Reaksi yang terjadi di anode adalah …",
+              options: [
+                  "2H2O(l) + 2e– &rarr; H2(g) + 2OH–(aq)", 
+                  "Ca2+(aq) + 2e– &rarr; Ca(s)", 
+                  "2Cl–(aq) &rarr; Cl2(g) + 2e–", 
+                  "Ca(s) &rarr; Ca2+(aq) + 2e–", 
+                  "Ca2+(aq) + 2H2O(l) &rarr; Ca(OH)2 (aq) + H2(g)"
+              ], answer: 2 },
+            { id: 7, type: 'pg', difficulty: "Sedang", cognitive: "Analisis",
+              stimulus: "<img src='https://imgur.com/xu6MzKh.jpg' class='w-full max-h-56 object-contain mb-2 cursor-zoom-in rounded' onclick='openModal(this.src)' alt='Korosi'><p class='mt-2'>Gambar menunjukkan pembentukan korosi pada besi (1. Terbuka, 2. Kapas basah, 3. Air garam, 4. Udara kering, 5. Minyak).</p>",
+              question: "Percobaan yang terjadi korosi paling cepat adalah ....",
+              options: ["1 dan 3", "2 dan 4", "3 dan 5", "1 dan 5", "2 dan 5"], answer: 0 },
+            { id: 8, type: 'pg', difficulty: "Sedang", cognitive: "Konsep",
+              stimulus: "<div class='flex flex-col items-center'><img src='https://imgur.com/X9NPJE7.jpg' class='w-full max-h-96 object-contain rounded cursor-zoom-in border border-gray-200 dark:border-slate-600 bg-white p-2' onclick='openModal(this.src)' alt='Pilihan Gambar Sel Volta'><span class='text-xs text-gray-500 dark:text-gray-400 mt-1'><i class='fas fa-search-plus mr-1'></i>Klik gambar untuk memperbesar pilihan A, B, C, D, dan E</span></div>",
+              question: "Diketahui notasi sel volta : Zn | Zn2+ || Fe2+ | Fe (Eo = 0,32 V). Berdasarkan gambar di atas, rangkaian sel volta yang tepat adalah ....",
+              options: [
+                  "Gambar A",
+                  "Gambar B",
+                  "Gambar C",
+                  "Gambar D",
+                  "Gambar E"
+              ], answer: 0 },
+            { id: 9, type: 'pg', difficulty: "Mudah", cognitive: "Konsep",
+              question: "Sistem koloid yang dibuat dari zat cair yang terdispersi dalam gas disebut ...",
+              options: ["Buih", "Aerosol", "Sol", "Emulsi", "Busa"], answer: 1 },
+            { id: 10, type: 'pg', difficulty: "Mudah", cognitive: "Konsep",
+              question: "Contoh koloid yang tersusun dari zat terdispersi cair dalam medium cair adalah ...",
+              options: ["Susu", "Kabut", "Asap", "Batu apung", "Cat"], answer: 0 },
+            { id: 11, type: 'pg', difficulty: "Mudah", cognitive: "Konsep",
+              stimulus: "<p class='mb-2 font-medium'>Sifat koloid dapat diterapkan dalam kehidupan sehari-hari antara lain pada:</p><ol class='list-decimal list-inside space-y-1 ml-1'><li>Proses cuci darah</li><li>Pembuatan susu bubuk</li><li>Pembuatan lem kanji</li><li>Pembuatan es krim</li><li>Alat pemisah debu</li></ol>",
+              question: "Contoh pemanfaatan dialisis pada kehidupan sehari-hari adalah ...",
+              options: ["1", "2", "3", "4", "5"], answer: 0 },
+            { id: 12, type: 'pg', difficulty: "Sedang", cognitive: "Analisis",
+              stimulus: "<div class='flex flex-col items-center'><img src='https://imgur.com/K51Sq9x.jpg' class='w-full max-h-72 object-contain rounded cursor-zoom-in border border-gray-200 dark:border-slate-600 bg-white p-1' onclick='openModal(this.src)' alt='Gambar Soal Nomor 12'><span class='text-xs text-gray-500 dark:text-gray-400 mt-1'><i class='fas fa-search-plus mr-1'></i>Klik gambar untuk memperbesar</span></div>",
+              question: "",
+              options: ["1 dan 2", "1 dan 5", "2 dan 3", "3 dan 4", "4 dan 5"], answer: 2 },
+
+            // --- PGK (Lebih dari 1 Jawaban) (13-21) ---
+            { id: 13, type: 'pgk', difficulty: "Sedang", cognitive: "Analisis",
+              stimulus: "<div class='flex flex-col items-center'><img src='https://imgur.com/VkUOWp1.jpg' class='w-full max-h-64 object-contain rounded cursor-zoom-in border border-gray-200 dark:border-slate-600 bg-white p-1' onclick='openModal(this.src)' alt='Data Percobaan Titik Beku'><span class='text-xs text-gray-500 dark:text-gray-400 mt-1'><i class='fas fa-search-plus mr-1'></i>Klik gambar untuk memperbesar</span></div>",
+              question: "Pilih pernyataan-pernyataan yang BENAR (Lebih dari 1 jawaban): Data tersebut menunjukkan bahwa penurunan titik beku larutan …",
+              options: [
+                  "Berbanding lurus dengan konsentrasi", 
+                  "Tidak bergantung kepada jenis zat terlarut", 
+                  "Elektrolit yang lebih tinggi dari non elektrolit pada m yang sama", 
+                  "Bergantung pada jumlah partikel zat terlarut", 
+                  "Berbanding terbalik dengan konsentrasi"
+              ], answer: [0, 2, 3] },
+            { id: 14, type: 'pgk', difficulty: "Mudah", cognitive: "Konsep",
+              question: "Berikut ini merupakan cara pembuatan koloid dengan cara dispersi adalah … (Pilih >1 jawaban)",
+              options: ["Reaksi redoks", "Busur brediq", "Reaksi hidrolisis", "Peptisasi", "Mekanik"], answer: [1, 3, 4] },
+            { id: 15, type: 'pgk', difficulty: "Sedang", cognitive: "Analisis",
+              stimulus: "<div class='flex flex-col items-center mb-3'><img src='https://imgur.com/hZhodrx.jpg' class='w-full max-h-64 object-contain rounded cursor-zoom-in border border-gray-200 dark:border-slate-600 bg-white p-1' onclick='openModal(this.src)' alt='Sel Penyepuhan Garpu Ag'><span class='text-xs text-gray-500 dark:text-gray-400 mt-1'><i class='fas fa-search-plus mr-1'></i>Klik gambar untuk memperbesar</span></div><p>Penyepuhan garpu dengan perak (Ag). Anoda=Perak, Katoda=Garpu, Baterai 9V.</p>",
+              question: "Pernyataan berikut ini mana sajakah yang sesuai dengan gambar di atas? (Pilih >1)",
+              options: [
+                  "Garpu diletakkan di kutub (-)",
+                  "Logam Perak yang diletakkan di anode melepas electron",
+                  "Reaksi yang terjadi pada katode adalah Ag+ + e &rarr; Ag",
+                  "Rangkaian di atas menghasilkan listrik sebesar 9 Volt",
+                  "Logam yang bertindak sebagai katode adalah perak yang akan melapisi garpu"
+              ], answer: [0, 1, 2] },
+            { id: 16, type: 'pgk', difficulty: "Sedang", cognitive: "Analisis",
+              stimulus: "<div class='flex flex-col items-center'><img src='https://imgur.com/3lPW8mY.jpg' class='w-full max-h-64 object-contain rounded cursor-zoom-in border border-gray-200 dark:border-slate-600 bg-white p-1' onclick='openModal(this.src)' alt='Gambar Soal Nomor 16'><span class='text-xs text-gray-500 dark:text-gray-400 mt-1'><i class='fas fa-search-plus mr-1'></i>Klik gambar untuk memperbesar</span></div>",
+              question: "Sel elektrolisis yang menghasilkan gas oksigen (dari air) di anode adalah ... (Pilih >1 jawaban)",
+              options: [
+                  "(1) MgSO4 (aq) dengan elektroda C",
+                  "(2) AgNO3 (aq) dengan elektroda C",
+                  "(3) KCl (aq) dengan elektroda C",
+                  "(4) KCl (l) dengan elektroda C",
+                  "Semuanya tidak menghasilkan oksigen"
+              ], answer: [0, 1] },
+            { id: 17, type: 'pgk', difficulty: "Sulit", cognitive: "HOTS",
+              stimulus: "<p class='font-bold mb-2'>Perhatikan artikel berikut ini!</p><p class='mb-2 text-justify'>Proteksi katodik adalah teknik yang digunakan untuk mengendalikan korosi pada permukaan logam dengan menjadikan permukaan logam tersebut sebagai katode dari sel volta. Proteksi katodik ini merupakan metode yang umum digunakan untuk melindungi struktur logam dari korosi. Sistem proteksi katodik ini biasanya digunakan untuk melindungi baja, jalur pipa, tangki, tiang pancang, kapal, anjungan lepas pantai dan selubung sumur minyak di darat.</p><p class='text-justify'>Perlindungan katodik dilakukan dengan menghubungkan logam yang akan dilindungi dengan logam lain yang mempunyai potensial electrode sangat rendah. Ketika terjadi oksidasi, logam yang dilindungi akan segera menarik electron dari logam pelindung tersebut. Logam pelindung lama kelamaan akan habis dan harus selalu diganti dengan yang baru secara periodic.</p>",
+              question: "Berdasarkan artikel proteksi katodik, mana sajakah dari pernyataan berikut ini yang sesuai? (Pilih >1)",
+              options: [
+                  "Reaksi: O2 mengalami oksidasi menjadi OH- sedangkan Mg mengalami reduksi",
+                  "Logam yang sesuai untuk proteksi katodik adalah logam Mg",
+                  "Logam Mg dipilih karena mempunyai potensial elektrode sangat rendah (mudah teroksidasi)",
+                  "Ketika oksidasi, logam besi menarik elektron dari logam Mg",
+                  "Reaksi yang terjadi di katode adalah O2 + 2H2O + 4e &rarr; 4OH-"
+              ], answer: [1, 2, 3, 4] },
+            { id: 18, type: 'pgk', difficulty: "Mudah", cognitive: "Konsep",
+              question: "Pada reaksi redoks: Zn(s) + 2HCl (aq) &rarr; ZnCl2(aq) + H2 (g). Pernyataan yang benar adalah …",
+              options: [
+                  "Zat yang bertindak sebagai oksidator adalah HCl",
+                  "Zat yang bertindak sebagai reduktor adalah Zn",
+                  "Bilangan oksidasi Zn awal adalah 0",
+                  "Zat hasil oksidasi adalah HCl",
+                  "Zat hasil reduksi adalah H2"
+              ], answer: [0, 1, 2, 4] },
+            { id: 19, type: 'pgk', difficulty: "Sedang", cognitive: "Analisis",
+              stimulus: "<p class='font-bold mb-2'>Perhatikan artikel berikut ini!</p><p class='mb-2 text-justify'>Sel kering banyak digunakan pada alat-alat elektronika, contoh baterai pada senter. Sel ini merupakan sel volta primer. Sel kering ditemukan oleh Leclanche, sehingga sering disebut sel Leclanche. Pada sel Leclanche, reaksi oksidasi terjadi pada zink dan reaksi reduksi terjadi pada karbon yang inert. Elektrolitnya adalah pasta yang basah terdiri dari MnO2, ZnCl2, NH4Cl dan karbon hitam. Disebut sel kering karena dalam sel tidak terdapat cairan yang bebas.</p><div class='my-3 p-3 bg-white dark:bg-slate-800 rounded-lg border border-blue-200 dark:border-slate-600 text-xs md:text-sm font-mono overflow-x-auto'><p class='font-sans font-semibold mb-1'>Reaksi yang terjadi pada sel Leclanche dapat ditulis seperti berikut:</p><p>Anoda : Zn(s) &rarr; Zn2+(aq) + 2e&macr;</p><p>Katoda : 2MnO2(s) + 2NH4+(aq) + 2e&macr; &rarr; Mn2O3(s) + 2NH3(aq) + H2O(l)</p><p>Reaksi Sel : Zn(s) + 2MnO2(s) + 2NH4+(aq) &rarr; Zn2+(aq) + Mn2O3(s) + 2NH3(aq) + H2O(l)</p></div><p class='mb-2 text-justify'>Zn2+ dapat bereaksi dengan NH3 membentuk ion kompleks [Zn(NH3)4]2+.</p><p class='text-justify'>Potensial tiap sel Leclanche adalah 1,5 volt. Sel Leclanche tidak dapat diisi ulang, sehingga disebut sel primer.</p>",
+              question: "Dari beberapa pernyataan berikut, mana sajakah yang sesuai dengan prinsip Sel Kering? (Pilih >1)",
+              options: [
+                  "Sel kering karena elektrolit berupa pasta bebas cairan.",
+                  "Reaksi di katode, MnO2 bertindak sebagai reduktor.",
+                  "Elektrode yang digunakan pada kutub (-) adalah seng.",
+                  "Ion kompleks [Zn(NH3)4]2+ terbentuk dalam reaksi.",
+                  "Reaksi reduksi terjadi pada Zn."
+              ], answer: [0, 2, 3] },
+            { id: 20, type: 'pgk', difficulty: "Mudah", cognitive: "Konsep",
+              question: "Sebagai campuran antara suspensi dan larutan sejati, berikut ini yang termasuk sifat koloid adalah … (Pilih >1)",
+              options: ["Efek Tyndall", "Gerak Brown", "Dapat larut sempurna", "Adsorbsi", "Koagulasi"], answer: [0, 1, 3, 4] },
+            { id: 21, type: 'pgk', difficulty: "Sulit", cognitive: "HOTS",
+              stimulus: "Dua sel elektrolisis seri (Sel I: CuSO4, Sel II: AgNO3). Diperoleh 1,27 gram endapan tembaga (Ar Cu=63,5, Ar Ag=108).",
+              question: "Pernyataan berikut ini yang BENAR berdasarkan data tersebut adalah …",
+              options: [
+                  "Jumlah elektron yang terlibat pada setengah reaksi reduksi sel I (Cu) adalah 2.",
+                  "Jumlah elektron yang terlibat pada sel II (Ag) adalah 1.",
+                  "Massa endapan logam perak yang didapatkan adalah 4,32 gram.",
+                  "Massa endapan logam perak yang didapatkan adalah 3,42 gram.",
+                  "Jumlah elektron sel II adalah 2."
+              ], answer: [0, 1, 2] },
+
+            // --- BENAR/SALAH (22-27) ---
+            { id: 22, type: 'bs', difficulty: "Mudah", cognitive: "Literasi",
+              stimulus: "<p class='font-bold mb-2'>Perhatikan artikel berikut ini!</p><p class='mb-2 text-justify'>Pada negara dingin seperti Eropa, kita sudah tidak asing lagi dengan peristiwa salju yang sering terjadi pada musim dingin. Namun, turunnya salju dapat menjadi masalah yang serius karena dapat menganggu pejalan kaki maupun pengendara transportasi. Salju yang menutup jalan dapat menyebabkan jalan menjadi licin sehingga banyak terjadi kecelakaan akibat tergenlincir. Untuk mengatasi hal ini biasanya akan disediakan petugas pembersih salju, hal ini dapat dilakukan secara manual ataupun dengan mesin. Caranya sangat sederhana yaitu petugas akan menaburkan garam dapur atau urea ke salju sehingga salju akan mencair.</p><p class='mb-2 text-justify'>Meski begitu ada banyak pihak yang menggunakan garam lain yang lebih mahal yaitu kalsium klorida dan magnesium klorida. Kedua senyawa ini memiliki jumlah ion yang lebih banyak daripada garam dapur (NaCl), tidak hanya menurunkan temperature lebih besar daripada NaCl, tapi juga proses pelarutannya bersifat eksoterm, sehingga panas yang dihasilkan dapat membantu melelehkan salju dengan lebih cepat dan efektif.</p><p class='mb-2 text-justify'>Ataupun dengan menggunakan senyawa organic yang dicampur dengan kalium klorida (garam batu) dan magnesium klorida. Campuran ini terbukti efektif menurunkan suhu sampai -34 oC. Sehingga campuran garam tersebut dapat digunakan untuk es yang bersuhu lebih dari -34 oC.</p><p class='text-justify'>Air murni akan membeku pada suhu 0 oC, sehingga bila suhu udara mencapai 0 oC, air hujan akan berubah menjadi salju. Misalnya dengan penambahan sejumlah garam titik beku air menjadi -2 oC, maka pada suhu lingkungan 0 oC salju yang ada di jalanan akan segera mencair. Magnesium klorida dapat mencairkan es lebih cepat daripada natrium klorida, namun magnesium klorida juga dapat menarik kelembapan sehingga dapat mengakibatkan kondisi licin.</p>",
+              question: "Berdasarkan konsep sifat koligatif: “Pada negara dingin, cara mengatasi salju yang menutup jalan adalah dengan menaburkan garam dapur atau urea ke salju”",
+              options: ["BENAR", "SALAH"], answer: 0 },
+            { id: 23, type: 'bs', difficulty: "Sedang", cognitive: "Literasi",
+              stimulus: "<p class='font-bold mb-2'>Perhatikan artikel berikut ini!</p><p class='mb-2 text-justify'>Pada negara dingin seperti Eropa, kita sudah tidak asing lagi dengan peristiwa salju yang sering terjadi pada musim dingin. Namun, turunnya salju dapat menjadi masalah yang serius karena dapat menganggu pejalan kaki maupun pengendara transportasi. Salju yang menutup jalan dapat menyebabkan jalan menjadi licin sehingga banyak terjadi kecelakaan akibat tergenlincir. Untuk mengatasi hal ini biasanya akan disediakan petugas pembersih salju, hal ini dapat dilakukan secara manual ataupun dengan mesin. Caranya sangat sederhana yaitu petugas akan menaburkan garam dapur atau urea ke salju sehingga salju akan mencair.</p><p class='mb-2 text-justify'>Meski begitu ada banyak pihak yang menggunakan garam lain yang lebih mahal yaitu kalsium klorida dan magnesium klorida. Kedua senyawa ini memiliki jumlah ion yang lebih banyak daripada garam dapur (NaCl), tidak hanya menurunkan temperature lebih besar daripada NaCl, tapi juga proses pelarutannya bersifat eksoterm, sehingga panas yang dihasilkan dapat membantu melelehkan salju dengan lebih cepat dan efektif.</p><p class='mb-2 text-justify'>Ataupun dengan menggunakan senyawa organic yang dicampur dengan kalium klorida (garam batu) dan magnesium klorida. Campuran ini terbukti efektif menurunkan suhu sampai -34 oC. Sehingga campuran garam tersebut dapat digunakan untuk es yang bersuhu lebih dari -34 oC.</p><p class='text-justify'>Air murni akan membeku pada suhu 0 oC, sehingga bila suhu udara mencapai 0 oC, air hujan akan berubah menjadi salju. Misalnya dengan penambahan sejumlah garam titik beku air menjadi -2 oC, maka pada suhu lingkungan 0 oC salju yang ada di jalanan akan segera mencair. Magnesium klorida dapat mencairkan es lebih cepat daripada natrium klorida, namun magnesium klorida juga dapat menarik kelembapan sehingga dapat mengakibatkan kondisi licin.</p>",
+              question: "“Dengan penambahan sejumlah garam titik beku air menjadi -2 oC, maka pada suhu lingkungan 0 oC salju yang ada di jalanan akan segera mencair”",
+              options: ["BENAR", "SALAH"], answer: 0 },
+            { id: 24, type: 'bs', difficulty: "Sedang", cognitive: "Analisis",
+              stimulus: "Reaksi: MnO2 + 2NaCl + 2H2SO4 &rarr; MnSO4 + Na2SO4 + 2H2O + Cl2",
+              question: "“Dalam reaksi tersebut zat hasil reaksi reduksi adalah MnSO4” (Benar atau Salah?)",
+              options: ["BENAR", "SALAH"], answer: 0 },
+            { id: 25, type: 'bs', difficulty: "Sedang", cognitive: "Analisis",
+              stimulus: "<div class='flex flex-col items-center mb-3'><img src='https://imgur.com/hsM6AMg.jpg' class='w-full max-h-64 object-contain rounded cursor-zoom-in border border-gray-200 dark:border-slate-600 bg-white p-1' onclick='openModal(this.src)' alt='Rangkaian Sel Volta Cu-Ag'><span class='text-xs text-gray-500 dark:text-gray-400 mt-1'><i class='fas fa-search-plus mr-1'></i>Klik gambar untuk memperbesar</span></div><p>Sel Volta: Elektrode Cu dalam Cu(NO3)2 dan Ag dalam AgNO3. E0 Ag+ = +0,80 V, E0 Cu2+ = +0,34 V.</p>",
+              question: "“Reaksi yang terjadi pada elektroda negatif (anoda) pada sel volta tersebut adalah Cu &rarr; Cu2+ + 2e”",
+              options: ["BENAR", "SALAH"], answer: 0 },
+            { id: 26, type: 'bs', difficulty: "Sedang", cognitive: "Analisis",
+              stimulus: "<div class='flex flex-col items-center mb-3'><img src='https://imgur.com/hsM6AMg.jpg' class='w-full max-h-64 object-contain rounded cursor-zoom-in border border-gray-200 dark:border-slate-600 bg-white p-1' onclick='openModal(this.src)' alt='Rangkaian Sel Volta Cu-Ag'><span class='text-xs text-gray-500 dark:text-gray-400 mt-1'><i class='fas fa-search-plus mr-1'></i>Klik gambar untuk memperbesar</span></div><p>Sel Volta: Elektrode Cu dalam Cu(NO3)2 dan Ag dalam AgNO3. E0 Ag+ = +0,80 V, E0 Cu2+ = +0,34 V.</p>",
+              question: "“Harga E0sel dari kedua sel di atas (Cu dan Ag) adalah -0,46 volt”",
+              options: ["BENAR", "SALAH"], answer: 1 },
+            { id: 27, type: 'bs', difficulty: "Sedang", cognitive: "Analisis",
+              stimulus: "<p class='mb-2 font-medium'>Diketahui beberapa larutan yang akan dielektrolisis:</p><ul class='space-y-1 ml-1'><li>(1) Larutan CuSO4 dengan electrode karbon</li><li>(2) Larutan KCl dengan electrode tembaga</li><li>(3) Larutan AgNO3 dengan electrode platina</li><li>(4) Larutan NaCl dengan electrode karbon</li></ul>",
+              question: "“Dari beberapa larutan di atas, maka larutan yang menghasilkan gas oksigen di anode adalah larutan (1) dan (3)”",
+              options: ["BENAR", "SALAH"], answer: 0 },
+
+            // --- MENJODOHKAN (28-30) ---
+            { id: 28, type: 'mjdk', difficulty: "Sedang", cognitive: "Analisis",
+              question: "Pasangkan dengan tepat reaksi elektrolisis dengan larutan & elektrodenya!",
+              subQuestions: [
+                  "1. Anode pada larutan Ni(NO3)2 dengan elektrode Pt (Inert)",
+                  "2. Katode pada larutan MgSO4 dengan elektrode C",
+                  "3. Anode pada larutan AgNO3 dengan elektrode Ag",
+                  "4. Katode pada larutan KI dengan elektrode Pt"
+              ],
+              options: [
+                  "a) 2H2O (l) + 2e &rarr; H2 (g) + 2OH- (aq)",
+                  "b) 2H2O (l) &rarr; O2 (g) + 4H+ (aq) + 4e",
+                  "c) Ag &rarr; Ag+ + 1e"
+              ],
+              answer: [1, 0, 2, 0] },
+            { id: 29, type: 'mjdk', difficulty: "Mudah", cognitive: "Konsep",
+              question: "Pasangkan contoh penerapan yang TEPAT sesuai dengan sifat koligatif larutan!",
+              subQuestions: [
+                  "(1) Etilen glikol dalam radiator mobil",
+                  "(2) Destilasi / Penyulingan",
+                  "(3) Garam dapur untuk es putar",
+                  "(4) Pemberian garam pada lintah mematikan lintah"
+              ],
+              options: [
+                  "Kenaikan titik didih",
+                  "Penurunan titik beku",
+                  "Tekanan osmosis"
+              ],
+              answer: [1, 0, 1, 2] },
+            { id: 30, type: 'mjdk', difficulty: "Mudah", cognitive: "Konsep",
+              question: "Pasangkan nama koloid berdasarkan fasa terdispersi dan medium pendispersinya!",
+              subQuestions: [
+                  "1. Gas dalam Cair",
+                  "2. Gas dalam Padat",
+                  "3. Cair dalam Gas",
+                  "4. Cair dalam Cair",
+                  "5. Padat dalam Padat"
+              ],
+              options: [
+                  "a) Emulsi",
+                  "b) Emulsi Padat",
+                  "c) Buih",
+                  "d) Busa Padat",
+                  "e) Aerosol Cair"
+              ],
+              answer: [2, 3, 4, 0, 1] }
+        ];
+
+        // ----------------- STATE & VARIABLES -----------------
+        let state = {
+            userName: "",
+            userClass: "",
+            answers: bankSoal.map(s => (s.type === 'pgk' ? [] : (s.type === 'mjdk' ? {} : null))),
+            doubts: new Array(bankSoal.length).fill(false),
+            currentIndex: 0,
+            timer: 45 * 60, // 45 Menit
+            timerInterval: null,
+            isQuizActive: false,
+            violations: 0,
+            violationLogs: []
+        };
+
+        const formInputNama = document.getElementById('input-nama');
+        const formInputKelas = document.getElementById('input-kelas');
+        const btnMulai = document.getElementById('btn-mulai');
+        
+        // ----------------- INITIALIZATION & UI LISTENERS -----------------
+        function checkForm() {
+            if (formInputNama.value.trim() !== "" && formInputKelas.value !== "") {
+                btnMulai.removeAttribute('disabled');
+                btnMulai.classList.remove('cursor-not-allowed');
+            } else {
+                btnMulai.setAttribute('disabled', 'true');
+                btnMulai.classList.add('cursor-not-allowed');
+            }
+        }
+
+        formInputNama.addEventListener('input', checkForm);
+        formInputKelas.addEventListener('change', checkForm);
+
+        function toggleDarkMode() {
+            document.documentElement.classList.toggle('dark');
+        }
+
+        function openModal(src) {
+            document.getElementById('modal-image-src').src = src;
+            const modal = document.getElementById('image-modal');
+            modal.classList.remove('hidden');
+            modal.classList.remove('modal-exit');
+            modal.classList.add('modal-enter');
+        }
+
+        function closeModal() {
+            const modal = document.getElementById('image-modal');
+            modal.classList.remove('modal-enter');
+            modal.classList.add('modal-exit');
+            setTimeout(() => { modal.classList.add('hidden'); }, 290);
+        }
+
+        // ----------------- QUIZ CORE LOGIC & ANTI-CHEAT -----------------
+        function requestFullScreen() {
+            const elem = document.documentElement;
+            if (elem.requestFullscreen) {
+                elem.requestFullscreen().catch(() => {});
+            } else if (elem.webkitRequestFullscreen) {
+                elem.webkitRequestFullscreen();
+            } else if (elem.msRequestFullscreen) {
+                elem.msRequestFullscreen();
+            }
+        }
+
+        function exitFullScreen() {
+            if (document.fullscreenElement || document.webkitFullscreenElement || document.msFullscreenElement) {
+                if (document.exitFullscreen) {
+                    document.exitFullscreen().catch(() => {});
+                } else if (document.webkitExitFullscreen) {
+                    document.webkitExitFullscreen();
+                } else if (document.msExitFullscreen) {
+                    document.msExitFullscreen();
+                }
+            }
+        }
+
+        function recordViolation(reason) {
+            if (!state.isQuizActive) return;
+
+            state.violations++;
+            const timeNow = new Date().toLocaleTimeString('id-ID', { hour: '2-digit', minute: '2-digit', second: '2-digit' });
+            state.violationLogs.push(`[${timeNow}] ${reason}`);
+
+            Swal.fire({
+                title: 'PERINGATAN PELANGGARAN!',
+                html: `Anda terdeteksi <b>${reason}</b>.<br><br>Total Pelanggaran Tercatat: <span class="text-red-600 font-bold text-lg">${state.violations} kali</span>.<br><small class="text-gray-500">Aktivitas ini tercatat secara otomatis dan akan dilaporkan kepada guru.</small>`,
+                icon: 'error',
+                confirmButtonColor: '#d33',
+                confirmButtonText: 'Kembali ke Layar Penuh & Lanjutkan',
+                allowOutsideClick: false,
+                allowEscapeKey: false
+            }).then(() => {
+                if (state.isQuizActive) {
+                    requestFullScreen();
+                }
+            });
+        }
+
+        // Deteksi Pindah Tab / Minimize Browser
+        document.addEventListener('visibilitychange', () => {
+            if (document.hidden && state.isQuizActive) {
+                recordViolation('Berpindah Tab atau Meminimalkan Browser');
+            }
+        });
+
+        // Deteksi Keluar dari Mode Layar Penuh (Fullscreen)
+        document.addEventListener('fullscreenchange', () => {
+            if (!document.fullscreenElement && state.isQuizActive) {
+                recordViolation('Keluar dari Mode Layar Penuh (Fullscreen)');
+            }
+        });
+        document.addEventListener('webkitfullscreenchange', () => {
+            if (!document.webkitFullscreenElement && state.isQuizActive) {
+                recordViolation('Keluar dari Mode Layar Penuh (Fullscreen)');
+            }
+        });
+
+        function startQuiz() {
+            state.userName = formInputNama.value.trim();
+            state.userClass = formInputKelas.value;
+            state.isQuizActive = true;
+            state.violations = 0;
+            state.violationLogs = [];
+            
+            requestFullScreen();
+            
+            document.getElementById('landing-page').classList.add('hidden');
+            document.getElementById('quiz-page').classList.remove('hidden');
+            
+            renderSidebar();
+            renderQuestion(state.currentIndex);
+            startTimer();
+        }
+
+        function startTimer() {
+            const timerDisplay = document.getElementById('timer-display');
+            state.timerInterval = setInterval(() => {
+                state.timer--;
+                
+                if (state.timer <= 0) {
+                    clearInterval(state.timerInterval);
+                    timerDisplay.textContent = "00:00";
+                    autoSubmit();
+                    return;
+                }
+                
+                const minutes = Math.floor(state.timer / 60);
+                const seconds = state.timer % 60;
+                timerDisplay.textContent = `${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
+                
+                if(state.timer <= 300) { 
+                    timerDisplay.classList.add('text-red-500');
+                    timerDisplay.classList.remove('text-gray-800', 'dark:text-white');
+                }
+            }, 1000);
+        }
+
+        function isAnswered(idx) {
+            const ans = state.answers[idx];
+            if (ans === null) return false;
+            if (Array.isArray(ans)) return ans.length > 0;
+            if (typeof ans === 'object') return Object.keys(ans).length === bankSoal[idx].subQuestions.length;
+            return true;
+        }
+
+        function renderSidebar() {
+            const grid = document.getElementById('nav-grid');
+            grid.innerHTML = '';
+            
+            bankSoal.forEach((_, idx) => {
+                const btn = document.createElement('button');
+                btn.textContent = idx + 1;
+                btn.className = `w-10 h-10 flex items-center justify-center rounded-lg font-bold transition border-2 
+                                 hover:scale-105 hover:shadow-md ${getNavBtnColor(idx)}
+                                 ${idx === state.currentIndex ? 'ring-4 ring-primary/50' : ''}`;
+                btn.onclick = () => goToQuestion(idx);
+                grid.appendChild(btn);
+            });
+        }
+
+        function getNavBtnColor(idx) {
+            if (state.doubts[idx]) return 'bg-yellow-400 text-yellow-900 border-yellow-500';
+            if (isAnswered(idx)) return 'bg-green-500 text-white border-green-600';
+            return 'bg-white dark:bg-slate-700 text-gray-700 dark:text-gray-200 border-gray-300 dark:border-slate-500';
+        }
+
+        function renderQuestion(idx) {
+            const soal = bankSoal[idx];
+            
+            document.getElementById('soal-nomor').textContent = idx + 1;
+            
+            let colorDiff = soal.difficulty === "Mudah" ? "bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-200" :
+                            (soal.difficulty === "Sedang" ? "bg-yellow-100 text-yellow-800 dark:bg-yellow-900 dark:text-yellow-200" : 
+                            "bg-red-100 text-red-800 dark:bg-red-900 dark:text-red-200");
+                            
+            document.getElementById('soal-badges').innerHTML = `
+                <span class="px-2 py-1 rounded bg-indigo-100 text-indigo-800 dark:bg-indigo-900 dark:text-indigo-200 border border-indigo-200 dark:border-indigo-700 uppercase">${soal.type}</span>
+                <span class="px-2 py-1 rounded bg-blue-100 text-blue-800 dark:bg-blue-900 dark:text-blue-200 border border-blue-200 dark:border-blue-700"><i class="fas fa-brain mr-1"></i> ${soal.cognitive}</span>
+                <span class="px-2 py-1 rounded border ${colorDiff} border-opacity-50"><i class="fas fa-signal mr-1"></i> ${soal.difficulty}</span>
+            `;
+
+            const stimulusBox = document.getElementById('stimulus-container');
+            if (soal.stimulus) {
+                stimulusBox.innerHTML = soal.stimulus;
+                stimulusBox.classList.remove('hidden');
+            } else {
+                stimulusBox.classList.add('hidden');
+            }
+            
+            document.getElementById('pertanyaan-teks').innerHTML = soal.question;
+
+            // RENDER OPSI JAWABAN (Disesuaikan Tipe, tanpa huruf A-E pada opsi PGK/BS)
+            const opsiBox = document.getElementById('opsi-container');
+            opsiBox.innerHTML = '';
+            
+            if (soal.type === 'pg' || soal.type === 'bs') {
+                const labels = soal.type === 'pg' ? ['A', 'B', 'C', 'D', 'E'] : ['\u2714', '\u2718'];
+                soal.options.forEach((opt, optIdx) => {
+                    const checked = state.answers[idx] === optIdx ? 'checked' : '';
+                    opsiBox.innerHTML += `
+                        <label class="relative flex cursor-pointer rounded-lg border bg-white dark:bg-slate-800 border-gray-200 dark:border-slate-600 p-4 shadow-sm focus:outline-none hover:bg-gray-50 dark:hover:bg-slate-700 transition">
+                            <input type="radio" name="jawaban" value="${optIdx}" class="radio-custom sr-only" onchange="selectAnswerPG(${idx}, ${optIdx})" ${checked}>
+                            <div class="flex w-full items-center justify-between pointer-events-none rounded-lg border-2 border-transparent absolute inset-0 transition"></div>
+                            <div class="flex items-center gap-4 z-10 w-full">
+                                <span class="flex items-center justify-center w-8 h-8 rounded bg-gray-100 dark:bg-slate-700 font-bold text-sm shrink-0 border border-gray-300 dark:border-slate-500">${labels[optIdx]}</span>
+                                <span class="text-sm md:text-base">${opt}</span>
+                            </div>
+                        </label>
+                    `;
+                });
+            } 
+            else if (soal.type === 'pgk') {
+                soal.options.forEach((opt, optIdx) => {
+                    const isChecked = state.answers[idx].includes(optIdx) ? 'checked' : '';
+                    opsiBox.innerHTML += `
+                        <label class="relative flex cursor-pointer rounded-lg border bg-white dark:bg-slate-800 border-gray-200 dark:border-slate-600 p-4 shadow-sm focus:outline-none hover:bg-gray-50 dark:hover:bg-slate-700 transition">
+                            <input type="checkbox" name="jawaban_pgk" value="${optIdx}" class="radio-custom sr-only" onchange="selectAnswerPGK(${idx}, ${optIdx})" ${isChecked}>
+                            <div class="flex w-full items-center justify-between pointer-events-none rounded-lg border-2 border-transparent absolute inset-0 transition"></div>
+                            <div class="flex items-center gap-4 z-10 w-full">
+                                <span class="flex items-center justify-center w-8 h-8 rounded bg-gray-100 dark:bg-slate-700 font-bold text-sm shrink-0 border border-gray-300 dark:border-slate-500"><i class="fas fa-check text-transparent ${isChecked ? '!text-primary dark:!text-emerald-400' : ''}"></i></span>
+                                <span class="text-sm md:text-base">${opt}</span>
+                            </div>
+                        </label>
+                    `;
+                });
+            }
+            else if (soal.type === 'mjdk') {
+                let html = '<div class="space-y-4">';
+                soal.subQuestions.forEach((subQ, subIdx) => {
+                    let selectOpts = `<option value="" disabled ${state.answers[idx][subIdx] === undefined ? 'selected' : ''}>Pilih Pasangan...</option>`;
+                    soal.options.forEach((opt, optIdx) => {
+                        const isSel = state.answers[idx][subIdx] === optIdx ? 'selected' : '';
+                        selectOpts += `<option value="${optIdx}" ${isSel}>${opt}</option>`;
+                    });
+                    
+                    html += `
+                        <div class="flex flex-col md:flex-row md:items-center gap-2 p-3 bg-gray-50 dark:bg-slate-700/50 rounded-lg border border-gray-200 dark:border-slate-600">
+                            <div class="flex-1 text-sm md:text-base">${subQ}</div>
+                            <select onchange="selectAnswerMJDK(${idx}, ${subIdx}, this.value)" class="w-full md:w-64 p-2 rounded-lg border border-gray-300 dark:border-slate-500 bg-white dark:bg-slate-800 text-sm focus:ring-primary focus:border-primary">
+                                ${selectOpts}
+                            </select>
+                        </div>
+                    `;
+                });
+                html += '</div>';
+                opsiBox.innerHTML = html;
+            }
+
+            document.getElementById('btn-prev').disabled = idx === 0;
+            
+            const btnNext = document.getElementById('btn-next');
+            if (idx === bankSoal.length - 1) {
+                btnNext.innerHTML = '<i class="fas fa-check-circle mr-2"></i> Selesai';
+                btnNext.className = "px-6 py-2.5 bg-green-600 hover:bg-green-700 text-white font-bold rounded-lg transition shadow flex items-center text-sm md:text-base";
+                btnNext.onclick = confirmSubmit;
+            } else {
+                btnNext.innerHTML = 'Selanjutnya <i class="fas fa-chevron-right ml-1 md:ml-2"></i>';
+                btnNext.className = "px-4 py-2.5 bg-primary text-white rounded-lg hover:bg-secondary transition flex items-center text-sm md:text-base font-medium";
+                btnNext.onclick = nextQuestion;
+            }
+
+            const btnRagu = document.getElementById('btn-ragu');
+            if(state.doubts[idx]) {
+                btnRagu.className = "px-4 py-2.5 bg-yellow-400 text-yellow-900 dark:bg-yellow-500 dark:text-slate-900 border border-yellow-500 rounded-lg hover:bg-yellow-500 transition text-sm md:text-base font-bold";
+            } else {
+                btnRagu.className = "px-4 py-2.5 bg-yellow-100 text-yellow-700 dark:bg-yellow-900/50 dark:text-yellow-400 border border-yellow-300 dark:border-yellow-700 rounded-lg hover:bg-yellow-200 transition text-sm md:text-base font-medium";
+            }
+        }
+
+        // Selection Handlers
+        function selectAnswerPG(soalIdx, optIdx) {
+            state.answers[soalIdx] = optIdx;
+            if(state.doubts[soalIdx]) state.doubts[soalIdx] = false;
+            renderSidebar();
+        }
+
+        function selectAnswerPGK(soalIdx, optIdx) {
+            let ansArray = state.answers[soalIdx];
+            if (ansArray.includes(optIdx)) {
+                state.answers[soalIdx] = ansArray.filter(i => i !== optIdx);
+            } else {
+                state.answers[soalIdx].push(optIdx);
+            }
+            renderQuestion(soalIdx);
+            if(state.doubts[soalIdx]) state.doubts[soalIdx] = false;
+            renderSidebar();
+        }
+
+        function selectAnswerMJDK(soalIdx, subIdx, optIdxVal) {
+            state.answers[soalIdx][subIdx] = parseInt(optIdxVal);
+            if(state.doubts[soalIdx]) state.doubts[soalIdx] = false;
+            renderSidebar();
+        }
+
+        function toggleDoubt() {
+            state.doubts[state.currentIndex] = !state.doubts[state.currentIndex];
+            renderSidebar();
+            renderQuestion(state.currentIndex);
+        }
+
+        function nextQuestion() {
+            if (state.currentIndex < bankSoal.length - 1) {
+                state.currentIndex++;
+                renderQuestion(state.currentIndex);
+                renderSidebar();
+            }
+        }
+
+        function prevQuestion() {
+            if (state.currentIndex > 0) {
+                state.currentIndex--;
+                renderQuestion(state.currentIndex);
+                renderSidebar();
+            }
+        }
+        
+        function goToQuestion(idx) {
+            state.currentIndex = idx;
+            renderQuestion(idx);
+            renderSidebar();
+        }
+
+        // ----------------- SUBMISSION & RESULTS -----------------
+        function confirmSubmit() {
+            let unans = 0;
+            bankSoal.forEach((_, idx) => { if(!isAnswered(idx)) unans++; });
+            const ragu = state.doubts.filter(d => d === true).length;
+            
+            let textAlert = "Apakah Anda yakin ingin mengumpulkan jawaban?";
+            if(unans > 0) textAlert += `<br><span class='text-red-500 font-bold'>Terdapat ${unans} soal yang belum dijawab tuntas!</span>`;
+            if(ragu > 0) textAlert += `<br><span class='text-yellow-500 font-bold'>Terdapat ${ragu} soal yang masih ditandai ragu-ragu!</span>`;
+
+            Swal.fire({
+                title: 'Konfirmasi Selesai',
+                html: textAlert,
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#059669',
+                cancelButtonColor: '#d33',
+                confirmButtonText: 'Ya, Kumpulkan!',
+                cancelButtonText: 'Batal'
+            }).then((result) => {
+                if (result.isConfirmed) processResults();
+            });
+        }
+
+        function autoSubmit() {
+            Swal.fire({
+                title: 'Waktu Habis!',
+                text: 'Jawaban Anda telah dikumpulkan secara otomatis.',
+                icon: 'info',
+                confirmButtonColor: '#059669',
+                allowOutsideClick: false
+            }).then(() => { processResults(); });
+        }
+
+        function getAnswerText(soal, ans, isKey = false) {
+            let targetAns = isKey ? soal.answer : ans;
+            
+            if (targetAns === null || targetAns === undefined || (Array.isArray(targetAns) && targetAns.length === 0) || (typeof targetAns === 'object' && !Array.isArray(targetAns) && Object.keys(targetAns).length === 0)) return "-";
+            
+            if (soal.type === 'pg' || soal.type === 'bs') {
+                let lbl = soal.type === 'pg' ? ["A","B","C","D","E"] : ["BENAR", "SALAH"];
+                return lbl[targetAns];
+            } else if (soal.type === 'pgk') {
+                const pgkLbl = ["A", "B", "C", "D", "E"];
+                return [...targetAns].sort().map(a => pgkLbl[a]).join(', ');
+            } else if (soal.type === 'mjdk') {
+                if(isKey) return "100% Cocok";
+                return "Terjawab";
+            }
+        }
+
+        function processResults() {
+            state.isQuizActive = false;
+            clearInterval(state.timerInterval);
+            exitFullScreen();
+            
+            let correct = 0, wrong = 0, unanswered = 0;
+            const rincianJawabanArray = [];
+
+            bankSoal.forEach((soal, idx) => {
+                const userAns = state.answers[idx];
+                let isCorrect = false;
+                let isKosong = !isAnswered(idx);
+
+                if (isKosong) {
+                    unanswered++;
+                } else {
+                    if (soal.type === 'pg' || soal.type === 'bs') {
+                        isCorrect = userAns === soal.answer;
+                    } else if (soal.type === 'pgk') {
+                        const sortedUser = [...userAns].sort();
+                        const sortedKey = [...soal.answer].sort();
+                        isCorrect = JSON.stringify(sortedUser) === JSON.stringify(sortedKey);
+                    } else if (soal.type === 'mjdk') {
+                        isCorrect = true;
+                        soal.answer.forEach((keyAns, subIdx) => {
+                            if (userAns[subIdx] !== keyAns) isCorrect = false;
+                        });
+                    }
+                    if(isCorrect) correct++; else wrong++;
+                }
+
+                let status = isKosong ? "Kosong" : (isCorrect ? "Benar" : "Salah");
+                let userTxt = getAnswerText(soal, userAns, false);
+
+                rincianJawabanArray.push(`No.${idx + 1}: ${userTxt} (${status})`);
+            });
+
+            // Hitung Skor Akhir (0 - 100)
+            const score = Math.round((correct / bankSoal.length) * 100);
+
+            document.getElementById('quiz-page').classList.add('hidden');
+            const resPage = document.getElementById('result-page');
+            resPage.classList.remove('hidden');
+            resPage.classList.add('flex');
+
+            document.getElementById('res-nama').textContent = state.userName;
+            document.getElementById('res-kelas').textContent = state.userClass;
+            document.getElementById('res-skor').textContent = score;
+            
+            const scoreEl = document.getElementById('res-skor');
+            if(score < 70) scoreEl.className = "text-5xl font-black text-red-500";
+            else if(score < 90) scoreEl.className = "text-5xl font-black text-yellow-500";
+            else scoreEl.className = "text-5xl font-black text-primary dark:text-emerald-400";
+
+            document.getElementById('stat-benar').textContent = `Benar: ${correct} dari ${bankSoal.length} soal`;
+            document.getElementById('stat-salah').textContent = `Salah: ${wrong}`;
+            document.getElementById('stat-kosong').textContent = `Tidak Dijawab: ${unanswered}`;
+            document.getElementById('stat-pelanggaran').textContent = `Pelanggaran: ${state.violations}x ${state.violationLogs.length > 0 ? '(' + state.violationLogs.join(', ') + ')' : '(Aman)'}`;
+
+            const ctx = document.getElementById('resultChart').getContext('2d');
+            new Chart(ctx, {
+                type: 'doughnut',
+                data: {
+                    labels: ['Benar', 'Salah', 'Kosong'],
+                    datasets: [{
+                        data: [correct, wrong, unanswered],
+                        backgroundColor: ['#10b981', '#ef4444', '#cbd5e1'],
+                        borderWidth: 0
+                    }]
+                },
+                options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { display: false } }, cutout: '70%' }
+            });
+
+            // Kirim data ke Google Sheets
+            const catatanPelanggaran = state.violations > 0 
+                ? `${state.violations}x (${state.violationLogs.join('; ')})` 
+                : '0 (Aman)';
+                
+            sendToGoogleSheets({
+                waktu: new Date().toLocaleString('id-ID'),
+                nama: state.userName,
+                kelas: state.userClass,
+                skor: score,
+                benar: correct,
+                salah: wrong,
+                kosong: unanswered,
+                pelanggaran: catatanPelanggaran,
+                rincian: rincianJawabanArray.join(' | ')
+            });
+        }
+
+        // ----------------- KIRIM DATA KE GOOGLE SHEETS -----------------
+        async function sendToGoogleSheets(payload) {
+            const statusEl = document.getElementById('sheets-status');
+            
+            if (!GOOGLE_SCRIPT_URL) {
+                statusEl.innerHTML = `<i class="fas fa-info-circle text-yellow-500"></i> <span>URL Google Sheets belum diatur.</span>`;
+                return;
+            }
+
+            statusEl.innerHTML = `<i class="fas fa-circle-notch fa-spin text-blue-500"></i> <span>Mengirim nilai ke rekap guru...</span>`;
+
+            try {
+                await fetch(GOOGLE_SCRIPT_URL, {
+                    method: 'POST',
+                    mode: 'no-cors',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(payload)
+                });
+
+                statusEl.innerHTML = `<i class="fas fa-check-circle text-green-500"></i> <span class="text-green-600 dark:text-green-400 font-medium">Nilai, jumlah benar & catatan pelanggaran terekam!</span>`;
+            } catch (error) {
+                console.error("Gagal mengirim ke Google Sheets:", error);
+                statusEl.innerHTML = `<i class="fas fa-exclamation-triangle text-red-500"></i> <span class="text-red-500">Gagal merekam ke server. Silakan unduh PDF sebagai bukti.</span>`;
+            }
+        }
+
+        // ----------------- EXPORT TO PDF -----------------
+        function downloadPDF() {
+            const element = document.getElementById('pdf-content');
+            const opt = {
+                margin:       0.5,
+                filename:     `Hasil_Tryout_Kimia_${state.userName.replace(/\s+/g, '_')}_${state.userClass.replace(/\s+/g, '_')}.pdf`,
+                image:        { type: 'jpeg', quality: 0.98 },
+                html2canvas:  { scale: 2, useCORS: true },
+                jsPDF:        { unit: 'in', format: 'a4', orientation: 'portrait' }
+            };
+
+            let isDark = document.documentElement.classList.contains('dark');
+            if(isDark) document.documentElement.classList.remove('dark'); 
+            
+            Swal.fire({
+                title: 'Mempersiapkan PDF',
+                text: 'Mohon tunggu sebentar...',
+                allowOutsideClick: false,
+                didOpen: () => { Swal.showLoading(); }
+            });
+
+            html2pdf().set(opt).from(element).save().then(() => {
+                if(isDark) document.documentElement.classList.add('dark');
+                Swal.close();
+            });
+        }
+    </script>
+</body>
+</html>
